@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDDY COLLECTION | Luxury Streetwear</title>
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Hero Specific Styles */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: radial-gradient(circle at center, rgba(255,42,42,0.08) 0%, var(--bg) 70%);
+        }
+
+        .hero-bg-text {
+            position: absolute;
+            font-family: var(--font-display);
+            font-size: 25vw;
+            color: rgba(255, 42, 42, 0.03);
+            white-space: nowrap;
+            z-index: 1;
+            top: 50%;
+            transform: translateY(-50%);
+            user-select: none;
+        }
+
+        .hero-content {
+            z-index: 10;
+            display: flex;
+            width: 90%;
+            max-width: 1400px;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 100px;
+        }
+
+        .hero-text {
+            flex: 1;
+        }
+
+        .hero-title {
+            font-size: 90px;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+        }
+
+        .hero-price {
+            font-family: var(--font-main);
+            font-size: 28px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: var(--text);
+            margin-bottom: 30px;
+        }
+
+        .hero-visual {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero-image-container {
+            width: 360px;
+            height: 360px;
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 30px 40px rgba(0,0,0,0.6));
+        }
+
+        .hero-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0;
+            border: none;
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+            z-index: 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .carousel-controls {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 20;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .carousel-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            width: 50px;
+            height: 50px;
+            border-radius: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition-snappy);
+            font-size: 20px;
+        }
+
+        .carousel-btn:hover {
+            background: var(--text);
+            border-color: var(--text);
+            color: var(--bg);
+        }
+
+        /* Home Sections */
+        .category-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 50px 5%;
+        }
+
+        .showcase-card {
+            height: 400px;
+            position: relative;
+            border-radius: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            padding: 40px;
+            text-decoration: none;
+            border: 1px solid transparent;
+            transition: var(--transition-snappy);
+        }
+        
+        .showcase-card:hover {
+            border-color: var(--border);
+        }
+
+        .showcase-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            z-index: 1;
+        }
+
+        .showcase-img {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            transition: transform 0.5s ease;
+        }
+
+        .showcase-card:hover .showcase-img {
+            transform: scale(1.05);
+        }
+
+        .showcase-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .showcase-title {
+            font-size: 40px;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 900px) {
+            .hero {
+                height: auto;
+                min-height: 100vh;
+                padding-top: 80px;
+                padding-bottom: 120px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            .hero-bg-text {
+                display: none;
+            }
+            .hero-content {
+                flex-direction: column-reverse;
+                text-align: center;
+                margin-top: 0;
+                padding-top: 0;
+                gap: 24px;
+            }
+            .hero-title {
+                font-size: 36px;
+                line-height: 1.1;
+                margin-bottom: 10px;
+            }
+            #hero-desc {
+                font-size: 13px !important;
+                margin: 0 auto 15px !important;
+                max-width: 320px !important;
+            }
+            .hero-price {
+                font-size: 26px;
+                margin-bottom: 15px;
+            }
+            .hero-image-container {
+                width: 220px;
+                height: 220px;
+            }
+            .hero-glow {
+                width: 180px;
+                height: 180px;
+            }
+            .carousel-controls {
+                bottom: 30px;
+            }
+            .carousel-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 18px;
+            }
+            .category-showcase {
+                grid-template-columns: 1fr;
+            }
+            .hero-actions {
+                justify-content: center;
+                flex-wrap: wrap;
+                margin-top: 15px;
+            }
+            .hero-actions .btn {
+                font-size: 11px !important;
+                padding: 10px 18px !important;
+                letter-spacing: 0.5px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding-top: 95px;
+                padding-bottom: 100px;
+            }
+            .hero-title {
+                font-size: 28px;
+            }
+            #hero-desc {
+                font-size: 12px !important;
+                max-width: 280px !important;
+            }
+            .hero-price {
+                font-size: 22px;
+                margin-bottom: 12px;
+            }
+            .hero-image-container {
+                width: 170px;
+                height: 170px;
+            }
+            .hero-glow {
+                width: 140px;
+                height: 140px;
+            }
+            .carousel-controls {
+                bottom: 20px;
+            }
+            .hero-actions {
+                gap: 8px;
+            }
+            .hero-actions .btn {
+                font-size: 10px !important;
+                padding: 8px 14px !important;
+            }
+        }
+        #trending-grid {
+            grid-template-columns: repeat(5, 1fr);
+        }
+        @media (max-width: 1024px) {
+            #trending-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (max-width: 600px) {
+            #trending-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-transition"></div>
+
+    <header class="glass">
+        <a href="index.html" class="logo">
+            <img src="assets/logo.png" alt="IDDY">
+        </a>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html?category=Men">Men</a></li>
+                <li><a href="shop.html?category=Women">Women</a></li>
+                <li><a href="shop.html?category=Shoes">Shoes</a></li>
+                <li><a href="shop.html?category=Accessories">Accessories</a></li>
+            </ul>
+        </nav>
+        <div class="nav-actions">
+            <div class="nav-search-wrap">
+                <input type="text" class="nav-search-input" id="nav-search" placeholder="Search...">
+                <button class="nav-btn" id="search-toggle" title="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+
+            <button class="nav-btn" id="theme-toggle"><i class="fa-solid fa-circle-half-stroke"></i></button>
+            <button class="nav-btn" id="cart-toggle"><i class="fa-solid fa-cart-shopping"></i> <span id="cart-count" style="font-size: 12px; background: var(--primary); padding: 2px 6px; border-radius: 10px; position: relative; top: -10px; right: 5px;">0</span></button>
+            <a href="admin.html" class="nav-btn"><i class="fa-solid fa-gear"></i></a>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+    <nav class="mobile-nav" id="mobile-nav">
+        <a href="index.html">Home</a>
+        <a href="shop.html?category=Men">Men</a>
+        <a href="shop.html?category=Women">Women</a>
+        <a href="shop.html?category=Shoes">Shoes</a>
+        <a href="shop.html?category=Accessories">Accessories</a>
+    </nav>
+
+    <main>
+        <!-- Dynamic Hero Banner -->
+        <section class="hero-banner" id="hero">
+            <img src="assets/prefooter-bg.png" alt="Background" class="hero-banner-bg">
+            <div class="hero-banner-overlay"></div>
+            
+            <div class="hero-banner-content" id="hero-content-wrapper" style="transition: opacity 0.8s ease;">
+                <div class="hero-text fade-in-up">
+                    <h5 class="text-primary" id="hero-subtitle" style="margin-bottom: 10px; letter-spacing: 2px; font-size: 14px; text-transform: uppercase;">IDDY COLLECTION</h5>
+                    <h1 class="hero-title" id="hero-title">Loading...</h1>
+                    <p id="hero-desc" style="color: var(--text-muted); font-size: 18px; margin-bottom: 30px;">Premium luxury streetwear.</p>
+                    <button class="btn btn-primary btn-glow" id="hero-action-btn">Shop Now</button>
+                </div>
+                <div class="hero-visual" style="transition: transform 0.8s ease;">
+                    <div class="hero-img-frame">
+                        <img src="assets/hero-collage.png" alt="Featured Product" id="hero-promo-img">
+                    </div>
+                </div>
+            </div>
+            <div class="hero-dots" id="hero-dots-container">
+                <!-- Dots injected via JS -->
+            </div>
+        </section>
+
+        <!-- Categories Bar -->
+        <section class="categories-bar-wrapper">
+            <div class="categories-bar">
+                <a href="shop.html?category=T-Shirt" class="cat-icon-wrapper"><div class="cat-icon"><i class="fa-solid fa-shirt"></i></div><span>T-Shirt</span></a>
+                <a href="shop.html?category=Jacket" class="cat-icon-wrapper"><div class="cat-icon"><i class="fa-solid fa-user-tie"></i></div><span>Jacket</span></a>
+                <a href="shop.html?category=Shirt" class="cat-icon-wrapper"><div class="cat-icon"><i class="fa-solid fa-vest"></i></div><span>Shirt</span></a>
+                <a href="shop.html?category=Jeans" class="cat-icon-wrapper"><div class="cat-icon"><i class="fa-solid fa-socks"></i></div><span>Jeans</span></a>
+                <a href="shop.html?category=Bag" class="cat-icon-wrapper"><div class="cat-icon"><i class="fa-solid fa-bag-shopping"></i></div><span>Bag</span></a>
+                <a href="shop.html?category=Shoes" class="cat-icon-wrapper"><div class="cat-icon"><i class="fa-solid fa-shoe-prints"></i></div><span>Shoes</span></a>
+                <a href="shop.html?category=Watches" class="cat-icon-wrapper"><div class="cat-icon"><i class="fa-regular fa-clock"></i></div><span>Watches</span></a>
+                <a href="shop.html?category=Cap" class="cat-icon-wrapper"><div class="cat-icon"><i class="fa-solid fa-hat-cowboy"></i></div><span>Cap</span></a>
+                <a href="shop.html" class="cat-icon-wrapper"><div class="cat-icon" style="background: var(--bg-surface);"><i class="fa-solid fa-border-all"></i></div><span>All Category</span></a>
+            </div>
+        </section>
+
+        <!-- Flash Sale -->
+        <section class="section flash-sale-section">
+            <div class="section-header">
+                <div class="flash-title-group">
+                    <h2 class="section-title"><i class="fa-solid fa-bolt"></i> Flash Sale</h2>
+                    <div class="countdown-timer">
+                        <span>09</span> : <span>17</span> : <span>56</span>
+                    </div>
+                </div>
+            </div>
+            <div style="position: relative;">
+                <button class="nav-btn-small flash-nav-btn" id="flash-prev" style="position: absolute; left: 15px; top: 40%; transform: translateY(-50%); z-index: 10; width: 45px; height: 45px; box-shadow: 5px 5px 0px var(--primary);"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="flash-sale-scroll" id="flash-sale-grid">
+                    <!-- Products injected here via JS -->
+                </div>
+                <button class="nav-btn-small flash-nav-btn" id="flash-next" style="position: absolute; right: 15px; top: 40%; transform: translateY(-50%); z-index: 10; width: 45px; height: 45px; box-shadow: 5px 5px 0px var(--primary);"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+        </section>
+
+        <!-- Todays For You! -->
+        <section class="section todays-picks-section">
+            <h2 class="section-title" style="text-align: left; margin-bottom: 20px;">Todays For You!</h2>
+            <div class="filter-pills">
+                <button class="pill active">Best Seller</button>
+                <button class="pill">Keep Stylish</button>
+                <button class="pill">Special Discount</button>
+                <button class="pill">Official Store</button>
+                <button class="pill">Curated Product</button>
+            </div>
+            <div class="product-grid" id="todays-grid">
+                <!-- Products injected here via JS -->
+            </div>
+        </section>
+
+        <!-- Curated Collections -->
+        <section class="section curated-collections">
+            <h2 class="section-title" style="text-align: center; margin-bottom: 40px;">Best Selling Collections</h2>
+            <div class="collections-layout">
+                <div class="collection-feature">
+                    <img src="assets/collection-hero.png" alt="IDDY Collection" id="collection-hero-img">
+                    <div class="collection-feature-text">
+                        <h3>IDDY COLLECTION</h3>
+                        <p>Shop, Explore, Delight and<br>Experience Premium Quality!</p>
+                    </div>
+                </div>
+                <div class="collection-grid" id="collection-grid">
+                    <!-- Cards injected via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Pre-Footer Banner -->
+        <section class="pre-footer-banner">
+            <img src="assets/prefooter-bg.png" alt="Background" class="pre-footer-bg">
+            <div class="pre-footer-overlay"></div>
+            <h1 class="pre-footer-text">“Let’s Shop Beyond Boundaries”</h1>
+        </section>
+    </main>
+
+    <footer style="padding: 50px 5%; background: var(--bg-surface); border-top: 1px solid var(--border); text-align: center;">
+        <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+            <a href="index.html" class="logo">
+                <img src="assets/logo.png" alt="IDDY" style="height: 64px;">
+            </a>
+        </div>
+        <p style="color: var(--text-muted);">Luxury Streetwear & Premium Sneakers</p>
+        <div style="margin-top: 30px; display: flex; justify-content: center; gap: 20px;">
+            <a href="#" id="footer-ig" target="_blank" style="display:none;">Instagram</a>
+            <a href="#" id="footer-tk" target="_blank" style="display:none;">Tiktok</a>
+        </div>
+        <p style="margin-top: 30px; font-size: 12px; color: #555;">&copy; 2026 IDDY COLLECTION. All rights reserved.</p>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button class="nav-btn" id="close-cart"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="cart-items" id="cart-items-container">
+            <!-- Items injected via JS -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total-price" class="text-primary">0 RWF</span>
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" id="checkout-btn">Proceed</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="js/store.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/home.js"></script>
+</body>
+</html>

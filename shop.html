@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop | IDDY COLLECTION</title>
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .shop-container {
+            display: flex;
+            padding: 120px 5% 50px;
+            gap: 40px;
+        }
+
+        .shop-sidebar {
+            width: 250px;
+            flex-shrink: 0;
+        }
+
+        .filter-group {
+            margin-bottom: 30px;
+        }
+
+        .filter-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .filter-list {
+            list-style: none;
+        }
+
+        .filter-list li {
+            margin-bottom: 10px;
+        }
+
+        .filter-list label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-muted);
+            transition: color 0.3s;
+        }
+
+        .filter-list label:hover {
+            color: var(--text);
+        }
+
+        .shop-main {
+            flex: 1;
+        }
+
+        .shop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .search-bar {
+            padding: 10px 15px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 4px;
+            width: 300px;
+        }
+
+        @media (max-width: 900px) {
+            .shop-container {
+                flex-direction: column;
+            }
+            .shop-sidebar {
+                width: 100%;
+            }
+            .shop-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .search-bar { width: 100%; }
+            .filter-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px 16px;
+            }
+            .filter-list li {
+                margin-bottom: 0;
+            }
+            .filter-group {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-transition"></div>
+
+    <header class="glass">
+        <a href="index.html" class="logo">
+            <img src="assets/logo.png" alt="IDDY">
+        </a>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html?category=Men">Men</a></li>
+                <li><a href="shop.html?category=Women">Women</a></li>
+                <li><a href="shop.html?category=Shoes">Shoes</a></li>
+                <li><a href="shop.html?category=Accessories">Accessories</a></li>
+            </ul>
+        </nav>
+        <div class="nav-actions">
+            <div class="nav-search-wrap">
+                <input type="text" class="nav-search-input" id="nav-search" placeholder="Search...">
+                <button class="nav-btn" id="search-toggle" title="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+
+            <button class="nav-btn" id="theme-toggle"><i class="fa-solid fa-circle-half-stroke"></i></button>
+            <button class="nav-btn" id="cart-toggle"><i class="fa-solid fa-cart-shopping"></i> <span id="cart-count" style="font-size:12px;background:var(--primary);padding:2px 6px;border-radius:10px;position:relative;top:-10px;right:5px;">0</span></button>
+            <a href="admin.html" class="nav-btn"><i class="fa-solid fa-gear"></i></a>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+    <nav class="mobile-nav" id="mobile-nav">
+        <a href="index.html">Home</a>
+        <a href="shop.html?category=Men">Men</a>
+        <a href="shop.html?category=Women">Women</a>
+        <a href="shop.html?category=Shoes">Shoes</a>
+        <a href="shop.html?category=Accessories">Accessories</a>
+    </nav>
+
+    <main class="shop-container">
+        <aside class="shop-sidebar fade-in-up" style="animation-delay: 0.1s;">
+
+            <div class="filter-group">
+                <h3 class="filter-title">Category</h3>
+                <ul class="filter-list" id="main-category-filter">
+                    <li><label><input type="radio" name="mainCat" value="All" checked> All</label></li>
+                    <li><label><input type="radio" name="mainCat" value="Men"> Men</label></li>
+                    <li><label><input type="radio" name="mainCat" value="Women"> Women</label></li>
+                    <li><label><input type="radio" name="mainCat" value="Shoes"> Shoes</label></li>
+                    <li><label><input type="radio" name="mainCat" value="Accessories"> Accessories</label></li>
+                </ul>
+            </div>
+
+            <!-- Sub-category: built dynamically by shop.js -->
+            <div class="filter-group" id="sub-cat-group" style="display:none;">
+                <h3 class="filter-title">Sub-Category</h3>
+                <ul class="filter-list" id="sub-cat-list"></ul>
+            </div>
+
+            <div class="filter-group">
+                <h3 class="filter-title">Gender</h3>
+                <ul class="filter-list" id="gender-filter">
+                    <li><label><input type="radio" name="gender" value="All" checked> All</label></li>
+                    <li><label><input type="radio" name="gender" value="Men"> Men</label></li>
+                    <li><label><input type="radio" name="gender" value="Women"> Women</label></li>
+                    <li><label><input type="radio" name="gender" value="Unisex"> Unisex</label></li>
+                </ul>
+            </div>
+
+            <div class="filter-group">
+                <a href="shop.html" style="font-size:13px;color:var(--text-muted);display:block;margin-top:10px;">
+                    <i class="fa-solid fa-xmark"></i> Reset All Filters
+                </a>
+            </div>
+
+        </aside>
+
+        <section class="shop-main fade-in-up" style="animation-delay: 0.2s;">
+            <div class="shop-header">
+                <h1 id="shop-title">COLLECTION</h1>
+                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                    <input type="text" id="search-input" class="search-bar" placeholder="Search products...">
+                    <select id="sort-select" style="padding:10px 12px;background:var(--bg-surface);border:1px solid var(--border);color:var(--text);border-radius:4px;font-size:13px;">
+                        <option value="newest">Newest First</option>
+                        <option value="price-asc">Price: Low → High</option>
+                        <option value="price-desc">Price: High → Low</option>
+                        <option value="name">Name A–Z</option>
+                    </select>
+                </div>
+            </div>
+            <div class="product-grid" id="shop-grid"></div>
+        </section>
+    </main>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button class="nav-btn" id="close-cart"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="cart-items" id="cart-items-container"></div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total-price" class="text-primary">0 RWF</span>
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" id="checkout-btn">Proceed</button>
+        </div>
+    </div>
+
+    <script type="module" src="js/store.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/shop.js"></script>
+</body>
+</html>

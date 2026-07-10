@@ -1,0 +1,89 @@
+/* css/animations.css */
+
+/* Floating animation for hero sneaker */
+@keyframes float {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.anim-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+/* Glow pulse */
+@keyframes glowPulse {
+    0% { box-shadow: 0 0 20px var(--primary-glow); }
+    50% { box-shadow: 0 0 40px var(--primary-glow); }
+    100% { box-shadow: 0 0 20px var(--primary-glow); }
+}
+
+.anim-glow {
+    animation: glowPulse 3s infinite;
+}
+
+/* Fade In Up */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+}
+
+/* Rotating Loader */
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.loader {
+    width: 50px;
+    height: 50px;
+    border: 3px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: rotate 1s linear infinite;
+}
+
+/* Page Transition Overlay */
+.page-transition {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100vh;
+    background: var(--bg);
+    z-index: 9999;
+    transform: translateY(-100%);
+    transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.page-transition.active {
+    transform: translateY(0);
+}
+
+/* Hero specific 3D effects */
+.hero-3d-container {
+    perspective: 1000px;
+}
+
+.hero-sneaker-wrapper {
+    transform-style: preserve-3d;
+    transition: transform 0.1s;
+}
+
+/* Background large typography animation */
+@keyframes panText {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+.bg-text-anim {
+    animation: panText 30s linear infinite;
+}

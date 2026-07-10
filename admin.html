@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | IDDY COLLECTION</title>
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { margin: 0; font-family: 'Inter', sans-serif; }
+
+        /* ── Login ─────────────────────── */
+        #login-screen {
+            position: fixed; inset: 0;
+            background: var(--bg);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999;
+        }
+        .login-box {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 50px 40px;
+            width: 360px;
+            text-align: center;
+        }
+        .login-box h1 { margin-bottom: 6px; font-size: 28px; }
+        .login-box p  { color: var(--text-muted); margin-bottom: 28px; font-size: 13px; }
+
+        /* ── Layout ────────────────────── */
+        #admin-panel { display: none; min-height: 100vh; }
+        .admin-wrap  { display: flex; min-height: 100vh; }
+
+        /* ── Sidebar ───────────────────── */
+        .adm-sidebar {
+            width: 220px; flex-shrink: 0;
+            background: var(--bg-surface);
+            border-right: 1px solid var(--border);
+            padding: 24px 16px;
+            display: flex; flex-direction: column;
+            position: sticky; top: 0; height: 100vh;
+            overflow-y: auto;
+        }
+        .adm-sidebar .brand { display: block; margin-bottom: 32px; }
+        .adm-sidebar .brand img { height: 40px; object-fit: contain; }
+        .adm-nav { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+        .adm-nav button {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 14px; border-radius: 8px;
+            font-size: 13px; color: var(--text-muted);
+            background: transparent; border: none; cursor: pointer;
+            text-align: left; width: 100%;
+            transition: all 0.2s;
+        }
+        .adm-nav button:hover, .adm-nav button.active {
+            background: rgba(230,0,0,0.12); color: var(--primary);
+        }
+        .adm-footer { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
+        .adm-footer a, .adm-footer button {
+            font-size: 12px; padding: 8px 12px; border-radius: 6px;
+            border: 1px solid var(--border); background: transparent;
+            color: var(--text-muted); cursor: pointer; text-align: center;
+            text-decoration: none; display: block;
+            transition: all 0.2s;
+        }
+        .adm-footer a:hover { color: var(--text); }
+        .adm-footer .btn-seed { border-color: rgba(230,0,0,0.3); color: var(--primary); }
+        .adm-footer .btn-seed:hover { background: rgba(230,0,0,0.1); }
+        .adm-footer .btn-logout { border-color: var(--border); color: var(--text-muted); }
+
+        /* ── Main ──────────────────────── */
+        .adm-main { flex: 1; padding: 36px; background: var(--bg); overflow-y: auto; }
+        .adm-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
+        .adm-top h1 { font-size: 24px; margin-bottom: 4px; }
+        .adm-top p  { font-size: 12px; color: var(--text-muted); }
+
+        /* ── Stats ─────────────────────── */
+        .stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+        .stat  {
+            background: var(--bg-surface); border: 1px solid var(--border);
+            border-radius: 10px; padding: 16px 20px; min-width: 100px;
+        }
+        .stat .lbl { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+        .stat .val { font-size: 26px; font-weight: 800; }
+
+        /* ── Toolbar ───────────────────── */
+        .toolbar { display: flex; gap: 10px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+        .adm-search {
+            padding: 9px 14px; background: var(--bg-surface);
+            border: 1px solid var(--border); color: var(--text);
+            border-radius: 6px; font-size: 13px; width: 220px;
+        }
+        .adm-search:focus { outline: none; border-color: var(--primary); }
+        .chip {
+            padding: 7px 16px; border-radius: 20px;
+            background: var(--bg-surface); border: 1px solid var(--border);
+            color: var(--text-muted); font-size: 12px; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .chip.on, .chip:hover { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+        /* ── Table ─────────────────────── */
+        .tbl-wrap { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; }
+        th { padding: 11px 14px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.02); }
+        td { padding: 11px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px; vertical-align: middle; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(255,255,255,0.02); }
+        td img { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; background: var(--bg); }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+        .b-men   { background: rgba(0,120,255,0.12); color: #4fa3ff; }
+        .b-women { background: rgba(255,80,200,0.12); color: #ff80d0; }
+        .b-shoes { background: rgba(255,180,0,0.12);  color: #ffb800; }
+        .b-acc   { background: rgba(155,89,182,0.12); color: #9b59b6; }
+        .b-yes   { background: rgba(0,200,100,0.12);  color: #00c864; }
+        .ab { padding: 5px 10px; border-radius: 5px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s; }
+        .ab-e { background: rgba(52,152,219,0.12); color: #3498db; }
+        .ab-e:hover { background: #3498db; color: #fff; }
+        .ab-d { background: rgba(230,0,0,0.1); color: var(--primary); }
+        .ab-d:hover { background: var(--primary); color: #fff; }
+        #no-products { text-align: center; padding: 50px; color: var(--text-muted); font-size: 14px; display: none; }
+
+        /* ── Modal ─────────────────────── */
+        .overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+            z-index: 1000; display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.25s;
+        }
+        .overlay.on { opacity: 1; pointer-events: all; }
+        .modal-box {
+            background: var(--bg-surface); border: 1px solid var(--border);
+            border-radius: 14px; padding: 32px; width: 900px;
+            max-width: 95vw; max-height: 90vh; overflow-y: auto;
+        }
+        .modal-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-hdr h2 { font-size: 19px; }
+        .close-x { background: transparent; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; }
+        .close-x:hover { color: var(--text); }
+        .form-row { display: flex; gap: 14px; }
+        .form-row .form-group { flex: 1; }
+        .img-strip { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+        .img-strip img { width: 56px; height: 56px; object-fit: cover; border-radius: 6px; border: 2px solid var(--border); }
+
+        /* ── Toast ─────────────────────── */
+        #toast {
+            position: fixed; bottom: 28px; right: 28px;
+            background: #1c1c1c; border: 1px solid var(--border);
+            padding: 12px 20px; border-radius: 8px; font-size: 13px;
+            z-index: 9999; opacity: 0; transform: translateY(16px);
+            transition: all 0.3s; pointer-events: none;
+        }
+        #toast.on { opacity: 1; transform: translateY(0); }
+        #toast.ok  { border-color: #00c864; color: #00c864; }
+        #toast.err { border-color: var(--primary); color: var(--primary); }
+
+        /* ── Upload Zone ───────────────── */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            background: rgba(255,255,255,0.01);
+            border-radius: 8px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 8px;
+        }
+        .upload-zone:hover, .upload-zone.dragover {
+            border-color: var(--primary);
+            background: rgba(230,0,0,0.03);
+        }
+        .upload-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        .upload-text {
+            font-size: 13px;
+            color: var(--text);
+            margin: 0;
+        }
+        .img-strip {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+        .img-thumb-container {
+            position: relative;
+            width: 68px;
+            height: 68px;
+        }
+        .img-thumb-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+        .img-thumb-remove {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 10px;
+            line-height: 18px;
+            text-align: center;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+        }
+        .img-thumb-remove:hover {
+            background: #ff1a1a;
+            transform: scale(1.1);
+        }
+        .size-chip {
+            padding: 8px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            user-select: none;
+            display: inline-block;
+        }
+        .size-chip.selected {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        /* ── Responsive Admin Panel ─────────────────── */
+
+        /* Medium screens: sidebar moves to top, horizontal layout */
+        @media (max-width: 900px) {
+            .admin-wrap {
+                flex-direction: column;
+            }
+            .adm-sidebar {
+                width: 100%;
+                height: auto;
+                min-height: unset;
+                position: relative;
+                top: auto;
+                flex-shrink: unset;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 14px 20px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 12px;
+            }
+            .adm-sidebar .brand {
+                margin-bottom: 0;
+                flex-shrink: 0;
+            }
+            .adm-sidebar .brand img {
+                height: 34px;
+            }
+            .adm-nav {
+                flex: 1;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 6px;
+                align-items: center;
+            }
+            .adm-nav button {
+                width: auto;
+                padding: 7px 12px;
+                font-size: 12px;
+                border-radius: 20px;
+                justify-content: center;
+            }
+            .adm-footer {
+                flex-direction: row;
+                margin-top: 0;
+                gap: 8px;
+                flex-shrink: 0;
+            }
+            .adm-footer a, .adm-footer button {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+        }
+
+        /* Small screens: stack everything, shrink more */
+        @media (max-width: 600px) {
+            .adm-sidebar {
+                flex-direction: column;
+                align-items: center;
+                padding: 12px 14px;
+                gap: 8px;
+            }
+            .adm-sidebar .brand img {
+                height: 28px;
+            }
+            .adm-nav {
+                justify-content: center;
+                gap: 5px;
+            }
+            .adm-nav button {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+            .adm-footer {
+                width: 100%;
+                justify-content: center;
+            }
+            .adm-footer a, .adm-footer button {
+                flex: 1;
+                text-align: center;
+                font-size: 11px;
+                padding: 6px 8px;
+            }
+            .adm-main {
+                padding: 16px 12px;
+            }
+            .adm-top {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                margin-bottom: 18px;
+            }
+            .adm-top h1 {
+                font-size: 20px;
+            }
+            .adm-top .btn {
+                width: 100%;
+            }
+            .stat {
+                flex: 1 1 calc(50% - 6px);
+                padding: 10px 12px;
+                text-align: center;
+                min-width: unset;
+            }
+            .stat .val {
+                font-size: 20px;
+            }
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+            .adm-search {
+                width: 100%;
+            }
+            .tbl-wrap {
+                overflow-x: auto;
+                display: block;
+                -webkit-overflow-scrolling: touch;
+            }
+            table {
+                min-width: 650px;
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            .modal-box {
+                padding: 18px 14px;
+            }
+            .modal-hdr h2 {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="toast"></div>
+
+<!-- ── LOGIN ────────────────────────────────────────────── -->
+<div id="login-screen">
+    <div class="login-box">
+        <img src="assets/logo.png" alt="IDDY" style="height: 80px; margin-bottom: 16px; object-fit: contain;">
+        <p>Admin Dashboard · Secure Login</p>
+        <form id="login-form">
+            <div class="form-group">
+                <input type="text" id="username" class="form-control" placeholder="Username" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" class="form-control" placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%;">Login</button>
+            <p id="login-err" style="color:var(--primary);font-size:13px;margin-top:10px;display:none;">
+                ⚠ Invalid username or password
+            </p>
+        </form>
+    </div>
+</div>
+
+<!-- ── ADMIN PANEL ───────────────────────────────────────── -->
+<div id="admin-panel">
+    <div class="admin-wrap">
+
+        <!-- Sidebar -->
+        <aside class="adm-sidebar">
+            <a href="index.html" class="brand">
+                <img src="assets/logo.png" alt="IDDY">
+            </a>
+            <nav class="adm-nav">
+                <button onclick="setView('All',this)" class="active"><i class="fa-solid fa-box"></i> All Products</button>
+                <button onclick="setView('Men',this)"><i class="fa-solid fa-shirt"></i> Men</button>
+                <button onclick="setView('Women',this)"><i class="fa-solid fa-person-dress"></i> Women</button>
+                <button onclick="setView('Shoes',this)"><i class="fa-solid fa-shoe-prints"></i> Shoes</button>
+                <button onclick="setView('Accessories',this)"><i class="fa-solid fa-glasses"></i> Accessories</button>
+                <button onclick="setView('Settings',this)"><i class="fa-solid fa-gear"></i> Settings</button>
+            </nav>
+            <div class="adm-footer">
+                <a href="index.html" target="_blank">🌐 View Website ↗</a>
+                <button class="btn-logout" id="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="adm-main">
+            <div id="products-view">
+                <div class="adm-top">
+                    <div>
+                        <h1 id="view-title">All Products</h1>
+                        <p>Changes are saved instantly and appear live on the website.</p>
+                    </div>
+                    <button class="btn btn-primary" id="open-add">+ Add Product</button>
+                </div>
+
+                <!-- Stats -->
+                <div class="stats" id="stats"></div>
+
+                <!-- Toolbar -->
+                <div class="toolbar">
+                    <input type="text" class="adm-search" id="adm-search" placeholder="Search by name or subcategory…">
+                    <span class="chip on" data-cat="All">All</span>
+                    <span class="chip" data-cat="Men">Men</span>
+                    <span class="chip" data-cat="Women">Women</span>
+                    <span class="chip" data-cat="Shoes">Shoes</span>
+                    <span class="chip" data-cat="Accessories">Accessories</span>
+                </div>
+
+                <!-- Table -->
+                <div class="tbl-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name &amp; Sub-category</th>
+                                <th>Category</th>
+                                <th>Gender</th>
+                                <th>Price (RWF)</th>
+                                <th>Stock</th>
+                                <th>Featured</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="prod-tbody"></tbody>
+                    </table>
+                    <p id="no-products">No products found. Click <strong>+ Add Product</strong> to get started.</p>
+                </div>
+            </div>
+
+            <!-- Settings View -->
+            <div id="settings-view" style="display: none;">
+                <div class="adm-top">
+                    <div>
+                        <h1>Global Settings</h1>
+                        <p>Configure store-wide settings like WhatsApp contact numbers.</p>
+                    </div>
+                </div>
+                <div class="tbl-wrap" style="padding: 24px;">
+                    <form id="settings-form">
+                        <div class="form-group" style="max-width: 400px;">
+                            <label>WhatsApp Number (Country Code + Number)</label>
+                            <input type="text" id="wa-number" class="form-control" placeholder="e.g. 250794476826" required>
+                        </div>
+                        <div class="form-group" style="max-width: 400px;">
+                            <label>Instagram Link</label>
+                            <input type="url" id="ig-link" class="form-control" placeholder="https://instagram.com/...">
+                        </div>
+                        <div class="form-group" style="max-width: 400px;">
+                            <label>TikTok Link</label>
+                            <input type="url" id="tk-link" class="form-control" placeholder="https://tiktok.com/@...">
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="save-settings-btn">Save Settings</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- ── ADD / EDIT MODAL ──────────────────────────────────── -->
+<div class="overlay" id="prod-overlay">
+    <div class="modal-box">
+        <div class="modal-hdr">
+            <h2 id="form-title">Add Product</h2>
+            <button class="close-x" id="close-form"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <form id="prod-form">
+            <input type="hidden" id="f-id">
+
+            <div class="form-group">
+                <label>Product Name *</label>
+                <input type="text" id="f-name" class="form-control" placeholder="e.g. IDDY Air Phantom">
+            </div>
+            <div class="form-group">
+                <label>Description *</label>
+                <textarea id="f-desc" class="form-control" rows="3" placeholder="Describe the product…"></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Price (RWF) *</label>
+                    <input type="number" id="f-price" class="form-control" placeholder="e.g. 150000" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Stock *</label>
+                    <input type="number" id="f-stock" class="form-control" placeholder="e.g. 20" min="0">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Main Category *</label>
+                    <select id="f-cat" class="form-control">
+                        <option value="Men">Men</option>
+                        <option value="Women">Women</option>
+                        <option value="Shoes">Shoes</option>
+                        <option value="Accessories">Accessories</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Gender *</label>
+                    <select id="f-gender" class="form-control">
+                        <option value="Men">Men</option>
+                        <option value="Women">Women</option>
+                        <option value="Unisex">Unisex</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Sub-category *</label>
+                    <select id="f-sub" class="form-control"></select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Available Sizes *</label>
+                <div id="size-options-container" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Product Images *</label>
+                <div class="upload-zone" id="upload-zone">
+                    <div class="upload-icon"><i class="fa-solid fa-camera"></i></div>
+                    <p class="upload-text"><strong>Click to upload</strong> or drag &amp; drop images here</p>
+                    <p style="font-size:11px;color:var(--text-muted);margin-top:4px;">JPG, PNG, WEBP • Max 2MB each • Up to 5 images</p>
+                    <input type="file" id="f-imgs" accept="image/*" multiple style="display:none;">
+                </div>
+                <div class="img-strip" id="img-strip"></div>
+                <!-- hidden field stores base64 data -->
+                <input type="hidden" id="f-imgs-data">
+            </div>
+
+            <div class="form-group" style="display:flex;align-items:center;gap:12px;margin-top:4px;">
+                <input type="checkbox" id="f-featured" style="width:18px;height:18px;cursor:pointer;">
+                <label for="f-featured" style="margin:0;cursor:pointer;">
+                    Mark as <strong>Featured</strong> — shown on homepage carousel
+                </label>
+            </div>
+
+            <div style="display:flex;gap:12px;margin-top:20px;">
+                <button type="submit" class="btn btn-primary" style="flex:1;" id="form-submit-btn">Save Product</button>
+                <button type="button" class="btn btn-outline" id="cancel-form">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="module" src="js/store.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
