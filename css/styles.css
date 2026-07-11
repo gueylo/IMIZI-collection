@@ -1440,11 +1440,12 @@ nav a.active::after {
 .pv-thumb {
     width: 80px;
     height: 100px;
-    object-fit: cover;
+    object-fit: contain; /* changed from cover to prevent cutoff */
     border: 2px solid transparent;
     cursor: pointer;
-    background: var(--bg-surface);
+    background: #ffffff; /* changed to white for blend mode */
     transition: var(--transition-snappy);
+    mix-blend-mode: multiply; /* removes white background */
 }
 .pv-thumb:hover, .pv-thumb.active {
     border-color: var(--primary);
@@ -1453,7 +1454,7 @@ nav a.active::after {
 .pv-main-image-container {
     flex: 1;
     position: relative;
-    background: var(--bg-surface);
+    background: #ffffff; /* changed to white to blend with product background */
     border: 1px solid var(--border);
     display: flex;
     align-items: center;
@@ -1464,8 +1465,9 @@ nav a.active::after {
 .pv-main-image-container img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain; /* changed from cover to prevent cutoff */
     transition: transform 0.3s ease;
+    mix-blend-mode: multiply; /* removes white background */
 }
 
 .zoom-btn {
