@@ -3,7 +3,7 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 
 // Initialize Supabase Client
 const SUPABASE_URL = 'https://ycilgtlhbotpoourhper.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljaWxndGxoYm90cG9vdXJocGVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2NzIwMDgsImV4cCI6MjA5OTI0ODAwOH0.z_bUq932K40n2j9c6l-1Rif1uPj_qYp6s-7y7L_GfCw';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InljaWxndGxoYm90cG9vdXJocGVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2NzIwMDgsImV4cCI6MjA5OTI0ODAwOH0.d5s6SH9qjy-ehBuy3BeQKzu9rV5Fi80kNVRFDN4d69Y';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const STORE_KEY   = 'iddy_products';
