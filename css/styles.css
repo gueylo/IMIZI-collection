@@ -995,6 +995,13 @@ nav a.active::after {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: flex-start;
+}
+
+@media (max-width: 768px) {
+    .hero-text {
+        align-items: center; /* Center the button on mobile */
+    }
 }
 
 .hero-visual {
