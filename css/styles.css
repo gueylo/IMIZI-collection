@@ -959,7 +959,7 @@ nav a.active::after {
 /* Hero Banner */
 .hero-banner {
     position: relative;
-    padding: 60px 5% 20px;
+    padding: 100px 5% 40px;
     background: var(--bg-surface);
     display: flex;
     flex-direction: column;
