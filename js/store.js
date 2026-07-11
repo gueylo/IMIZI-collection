@@ -226,3 +226,9 @@ window.updateCartQuantity = updateCartQuantity;
 window.clearCart = clearCart;
 window.getWishlistIds = getWishlistIds;
 window.adminLogin = adminLogin;
+
+export { 
+    getProducts, addProduct, updateProduct, deleteProduct, 
+    getSettings, updateSetting, getCart, saveCart, addToCart, 
+    removeFromCart, updateCartQuantity, clearCart, getWishlistIds, adminLogin 
+};
