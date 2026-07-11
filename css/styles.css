@@ -1396,7 +1396,16 @@ nav a.active::after {
         flex-direction: column;
         text-align: center;
         padding-top: 20px;
+        display: flex;
     }
+    .hero-text {
+        display: contents;
+    }
+    #hero-subtitle { order: 1; margin-bottom: 5px !important; }
+    #hero-title { order: 2; margin-bottom: 15px !important; }
+    .hero-visual { order: 3; margin-bottom: 20px; width: 100%; }
+    #hero-desc { order: 4; margin-bottom: 20px !important; }
+    #hero-action-btn { order: 5; margin: 0 auto; display: inline-block; }
     .flash-title-group {
         flex-direction: column;
         align-items: flex-start;
