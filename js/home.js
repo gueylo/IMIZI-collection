@@ -55,14 +55,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             updateHero(nextIdx);
         };
         
-        heroInterval = setInterval(nextHero, 5000);
+        heroInterval = setInterval(nextHero, 30000);
         
         // Dot clicks
         dots.forEach(d => {
             d.addEventListener('click', (e) => {
                 clearInterval(heroInterval);
                 updateHero(parseInt(e.target.dataset.idx));
-                heroInterval = setInterval(nextHero, 5000);
+                heroInterval = setInterval(nextHero, 30000);
             });
         });
     }
