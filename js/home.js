@@ -69,9 +69,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
 
-    // Helper: Create Flash Sale Card HTML
-    function createFlashCardHTML(p) {
-        const percentSold = Math.floor(Math.random() * 50) + 40; // Random 40-90% sold
+    // Helper: Create New Stock Card HTML
+    function createNewStockCardHTML(p) {
         return `
             <div class="product-card fade-in-up" onclick="window.location.href='product.html?id=${p.id}'" style="cursor:pointer;">
                 <div class="product-img-wrapper">
@@ -80,27 +79,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <div class="product-info">
                     <h3 class="product-title">${p.name}</h3>
                     <div class="product-price">
-                        <span class="text-primary">${(p.price * 0.5).toLocaleString()} RWF</span>
-                        <span style="text-decoration: line-through; color: var(--text-muted); font-size: 12px; margin-left: 8px;">${p.price.toLocaleString()}</span>
-                    </div>
-                    
-                    <div class="flash-progress">
-                        <div class="progress-track">
-                            <div class="progress-fill" style="width: ${percentSold}%;"></div>
-                        </div>
-                        <div class="progress-text">${percentSold}% Sold</div>
+                        <span class="text-primary">${p.price.toLocaleString()} RWF</span>
                     </div>
                 </div>
             </div>
         `;
     }
 
-    // ── Flash Sale Grid ────────────────────────────────────
-    const flashGrid = document.getElementById('flash-sale-grid');
-    if (flashGrid) {
-        // Just take the first 8 products as "Flash Sale"
-        const flashProducts = allProducts.slice(0, 8);
-        flashGrid.innerHTML = flashProducts.map(p => createFlashCardHTML(p)).join('') + `
+    // ── New Stock Grid ────────────────────────────────────
+    const newStockGrid = document.getElementById('new-stock-grid');
+    if (newStockGrid) {
+        // Take the first 8 products as "New Stock" (they are sorted by newest first in store.js)
+        const newStockProducts = allProducts.slice(0, 8);
+        newStockGrid.innerHTML = newStockProducts.map(p => createNewStockCardHTML(p)).join('') + `
             <div class="product-card fade-in-up" style="display:flex; align-items:center; justify-content:center; cursor:pointer; background: transparent; border: 1px dashed var(--border); box-shadow: none;" onclick="window.location.href='shop.html'">
                 <div style="text-align:center; color:var(--text-muted); font-size:16px; font-weight:bold; padding: 20px;">
                     See All <br><br><i class="fa-solid fa-arrow-right" style="font-size: 24px;"></i>
@@ -113,24 +104,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const btnNext = document.getElementById('flash-next');
 
         if (btnPrev && btnNext) {
-            btnNext.onclick = () => { flashGrid.scrollBy({ left: 300, behavior: 'smooth' }); };
-            btnPrev.onclick = () => { flashGrid.scrollBy({ left: -300, behavior: 'smooth' }); };
-        }
-
-        // Countdown Timer Logic
-        let hours = 9, minutes = 17, seconds = 56;
-        const spans = document.querySelectorAll('.countdown-timer span');
-        if (spans.length === 3) {
-            setInterval(() => {
-                seconds--;
-                if (seconds < 0) { seconds = 59; minutes--; }
-                if (minutes < 0) { minutes = 59; hours--; }
-                if (hours < 0) { hours = 23; }
-                
-                spans[0].textContent = hours.toString().padStart(2, '0');
-                spans[1].textContent = minutes.toString().padStart(2, '0');
-                spans[2].textContent = seconds.toString().padStart(2, '0');
-            }, 1000);
+            btnNext.onclick = () => { newStockGrid.scrollBy({ left: 300, behavior: 'smooth' }); };
+            btnPrev.onclick = () => { newStockGrid.scrollBy({ left: -300, behavior: 'smooth' }); };
         }
     }
 
