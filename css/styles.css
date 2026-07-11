@@ -309,16 +309,17 @@ nav a:hover::after { width: 100%; }
 
 .product-img-wrapper {
     aspect-ratio: 1 / 1;
-    height: auto;
     overflow: hidden;
     position: relative;
     background: #ffffff;
-    padding: 15px; /* Added padding to give the product breathing room */
 }
 
 .product-img {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: calc(100% - 30px);
+    height: calc(100% - 30px);
     object-fit: contain;
     mix-blend-mode: multiply;
     transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
