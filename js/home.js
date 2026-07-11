@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const percentSold = Math.floor(Math.random() * 50) + 40; // Random 40-90% sold
         return `
             <div class="product-card fade-in-up" onclick="window.location.href='product.html?id=${p.id}'" style="cursor:pointer;">
-                <div class="product-img-wrapper" style="aspect-ratio: 4 / 5; height: auto;">
+                <div class="product-img-wrapper">
                     <img src="${p.images[0]}" alt="${p.name}" class="product-img">
                 </div>
                 <div class="product-info">
