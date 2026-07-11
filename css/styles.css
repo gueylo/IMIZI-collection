@@ -641,7 +641,7 @@ nav a:hover::after { width: 100%; }
 
 /* Sections */
 .section {
-    padding: 100px 5%;
+    padding: 80px 5%;
 }
 
 .section-title {
@@ -652,6 +652,13 @@ nav a:hover::after { width: 100%; }
 
 /* Responsive */
 @media (max-width: 768px) {
+    .section {
+        padding: 40px 5%; /* Significantly reduced vertical padding on mobile */
+    }
+    .section-title {
+        margin-bottom: 30px;
+        font-size: 32px;
+    }
     html, body { font-size: 14px; }
     header {
         padding: 0 4%;
