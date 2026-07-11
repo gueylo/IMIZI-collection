@@ -368,7 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (checkoutInfoForm) {
         checkoutInfoForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const cart = getCart();
+            const cart = window.buyNowItem ? [window.buyNowItem] : getCart();
             if (!cart.length) return;
 
             const nameInput = document.getElementById('checkout-name');
@@ -451,8 +451,12 @@ document.addEventListener('DOMContentLoaded', () => {
             checkoutInfoModal.classList.remove('active');
             receiptModal.classList.add('active');
 
-            // Clear Cart after receipt is generated
-            clearCart();
+            // Clear Cart after receipt is generated (if not a buy-now item)
+            if (window.buyNowItem) {
+                window.buyNowItem = null;
+            } else {
+                clearCart();
+            }
         });
     }
 

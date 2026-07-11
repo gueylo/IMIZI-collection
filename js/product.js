@@ -116,10 +116,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // Actions
-        document.getElementById('pv-buy-btn').onclick = async () => {
+        document.getElementById('pv-buy-btn').onclick = () => {
             const qty = qtyInput ? parseInt(qtyInput.value) || 1 : 1;
-            await addToCart(product.id, qty, selectedSize);
-            window.location.href = 'index.html'; // Or redirect to checkout later
+            window.buyNowItem = { ...product, quantity: qty, selectedSize: selectedSize };
+            const checkoutInfoModal = document.getElementById('checkout-info-modal');
+            if (checkoutInfoModal) checkoutInfoModal.classList.add('active');
         };
         document.getElementById('pv-cart-btn').onclick = async () => {
             const qty = qtyInput ? parseInt(qtyInput.value) || 1 : 1;
