@@ -126,6 +126,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             } else {
                 grid.innerHTML = `<div style="padding: 20px; color: var(--text-muted); font-style: italic;">More ${cat} coming soon...</div>`;
             }
+
+            const btnPrev = document.getElementById(`${cat.toLowerCase()}-prev`);
+            const btnNext = document.getElementById(`${cat.toLowerCase()}-next`);
+
+            if (btnPrev && btnNext) {
+                btnNext.onclick = () => { grid.scrollBy({ left: 300, behavior: 'smooth' }); };
+                btnPrev.onclick = () => { grid.scrollBy({ left: -300, behavior: 'smooth' }); };
+            }
         }
     });
 
