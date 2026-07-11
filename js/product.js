@@ -21,10 +21,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Render Data
         document.getElementById('pv-breadcrumb-name').textContent = product.name;
         document.getElementById('pv-title').textContent = product.name;
-        
+
         const topCat = document.getElementById('pv-top-category');
         if (topCat) topCat.textContent = `${product.mainCategory} / ${product.subCategory}`;
-        
+
         const metaDetails = document.getElementById('pv-meta-details');
         if (metaDetails) {
             metaDetails.innerHTML = `<span style="color:var(--text);">${product.gender}</span> • ${product.stock} in stock`;
@@ -33,18 +33,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         const shortDesc = document.getElementById('pv-short-desc');
         if (shortDesc) shortDesc.textContent = product.description;
 
-        const price = product.price || 0;
-        document.getElementById('pv-price').textContent = `${price.toLocaleString()} RWF`;
-        
+        document.getElementById('pv-price').textContent = `${product.price.toLocaleString()} RWF`;
+
         // Mock Old Price (just for UI styling as requested)
-        document.getElementById('pv-old-price').textContent = `${(price * 2).toLocaleString()} RWF`;
+        document.getElementById('pv-old-price').textContent = `${(product.price * 2).toLocaleString()} RWF`;
 
         // Render Thumbnails
         const thumbnailsContainer = document.getElementById('pv-thumbnails');
         thumbnailsContainer.innerHTML = '';
-        
+
         // If product only has 1 image, duplicate it a few times for the UI demo effect
-        let displayImages = Array.isArray(product.images) && product.images.length > 0 ? [...product.images] : ['assets/logo.png'];
+        let displayImages = [...product.images];
         if (displayImages.length === 1) {
             displayImages = [displayImages[0], displayImages[0], displayImages[0], displayImages[0]];
         }
@@ -67,8 +66,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Render Colors
         const colorsContainer = document.getElementById('pv-colors');
         colorsContainer.innerHTML = '';
-        if (product.colors && product.colors.length > 0) {
-            product.colors.forEach((color, idx) => {
+        const prodColors = Array.isArray(product.colors) ? product.colors : [];
+        if (prodColors.length > 0) {
+            prodColors.forEach((color, idx) => {
                 const cBtn = document.createElement('button');
                 cBtn.className = `pv-size-btn ${idx === 0 ? 'active' : ''}`; // Reuse the brutalist button style
                 cBtn.textContent = color;
@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
         // ── Interaction Logic for Utilities & Actions ──
-        
+
         // Zoom Button
         document.getElementById('pv-zoom-btn')?.addEventListener('click', () => {
             if (mainImage.src) window.open(mainImage.src, '_blank');
