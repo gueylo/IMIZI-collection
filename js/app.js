@@ -269,11 +269,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── Checkout & Receipt System Modals HTML ─
     const checkoutInfoHtml = `
     <div class="modal" id="checkout-info-modal">
-        <div class="checkout-modal-content">
+        <div class="checkout-modal-content" style="max-width: 400px;">
             <button id="close-checkout-info" style="position:absolute;top:15px;right:15px;background:transparent;
                 border:none;color:var(--text-muted);font-size:18px;cursor:pointer;">✕</button>
             <h3 class="checkout-modal-title">Checkout Details</h3>
-            <p class="checkout-modal-subtitle">Provide your details to generate the order receipt.</p>
             <form id="checkout-info-form">
                 <div class="form-group" style="margin-bottom: 15px;">
                     <label for="checkout-name" style="display:block;margin-bottom:5px;font-size:12px;color:var(--text-muted);">Your Name</label>
@@ -283,7 +282,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     <label for="checkout-phone" style="display:block;margin-bottom:5px;font-size:12px;color:var(--text-muted);">WhatsApp Number</label>
                     <input type="tel" id="checkout-phone" class="form-control" style="width:100%;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);" placeholder="Enter your WhatsApp number" autocomplete="off" required>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width:100%;padding:14px;">Generate Receipt</button>
+                
+                <div style="background: var(--bg); padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid var(--border);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="color: var(--text-muted); font-size: 14px;">Total Price:</span>
+                        <span id="checkout-dynamic-total" style="font-weight: bold; color: var(--text);">0 RWF</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-muted); font-size: 14px;">Shipping:</span>
+                        <span style="font-weight: bold; color: var(--text);">Free</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-glow" style="width:100%;padding:14px;">Buy</button>
             </form>
         </div>
     </div>`;
@@ -355,6 +366,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const cart = getCart();
             if (!cart.length) { alert('Your cart is empty!'); return; }
             closeCartSidebar(); // close the cart sidebar
+            
+            let total = 0;
+            cart.forEach(item => { total += item.price * item.quantity; });
+            const totalEl = document.getElementById('checkout-dynamic-total');
+            if (totalEl) totalEl.textContent = `${total.toLocaleString()} RWF`;
+            
+            window.buyNowItem = null;
             checkoutInfoModal.classList.add('active');
         });
     }
@@ -393,38 +411,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 total += item.price * item.quantity;
             });
 
-            // Build Receipt Modal details
-            document.getElementById('receipt-order-id').textContent = `Order: ${orderId}`;
-            document.getElementById('receipt-date').textContent = `Date: ${dateStr}`;
-            document.getElementById('receipt-cust-name').textContent = name;
-            document.getElementById('receipt-cust-phone').textContent = phone;
-            document.getElementById('receipt-total-val').textContent = `${total.toLocaleString()} RWF`;
-
-            // Build list of items
-            const itemsContainer = document.getElementById('receipt-items-container');
-            itemsContainer.innerHTML = '';
-            cart.forEach(item => {
-                const row = document.createElement('div');
-                row.className = 'receipt-item-row';
-                row.innerHTML = `
-                    <div class="receipt-item-details">
-                        <img src="${item.images[0]}" alt="${item.name}" class="receipt-item-img">
-                        <div class="receipt-item-text">
-                            <span style="font-weight:600;">${item.name}</span>
-                            <span style="font-size:11px;color:var(--text-muted);">
-                                Qty: ${item.quantity} · Size: ${item.selectedSize || '—'}
-                            </span>
-                        </div>
-                    </div>
-                    <div style="font-weight:600;">${(item.price * item.quantity).toLocaleString()} RWF</div>
-                `;
-                itemsContainer.appendChild(row);
-            });
-
             // Build WhatsApp Message
-            let msg = `🧾 *IDDY COLLECTION ORDER RECEIPT*\n`;
+            let msg = `🧾 *IDDY COLLECTION ORDER*\n`;
             msg += `*Order Number:* ${orderId}\n`;
-            msg += `*Date:* ${dateStr}\n\n`;
             msg += `*Customer Details:*\n`;
             msg += `• Name: ${name}\n`;
             msg += `• WhatsApp: ${phone}\n\n`;
@@ -442,14 +431,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 index++;
             });
 
-            msg += `*TOTAL AMOUNT: ${total.toLocaleString()} RWF*\n\n`;
+            msg += `*TOTAL AMOUNT: ${total.toLocaleString()} RWF*\n`;
+            msg += `*SHIPPING:* Free\n\n`;
             msg += `Please confirm my order and guide me on payment. Thank you!`;
 
             currentOrderMsg = encodeURIComponent(msg);
-
-            // Transition modals
-            checkoutInfoModal.classList.remove('active');
-            receiptModal.classList.add('active');
 
             // Clear Cart after receipt is generated (if not a buy-now item)
             if (window.buyNowItem) {
@@ -457,6 +443,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 clearCart();
             }
+
+            checkoutInfoModal.classList.remove('active');
+            sendOrderToWhatsApp();
         });
     }
 

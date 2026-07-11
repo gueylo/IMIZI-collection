@@ -120,7 +120,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             const qty = qtyInput ? parseInt(qtyInput.value) || 1 : 1;
             window.buyNowItem = { ...product, quantity: qty, selectedSize: selectedSize };
             const checkoutInfoModal = document.getElementById('checkout-info-modal');
-            if (checkoutInfoModal) checkoutInfoModal.classList.add('active');
+            if (checkoutInfoModal) {
+                const totalEl = document.getElementById('checkout-dynamic-total');
+                if (totalEl) totalEl.textContent = `${(product.price * qty).toLocaleString()} RWF`;
+                checkoutInfoModal.classList.add('active');
+            }
         };
         document.getElementById('pv-cart-btn').onclick = async () => {
             const qty = qtyInput ? parseInt(qtyInput.value) || 1 : 1;
