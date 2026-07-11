@@ -42,11 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const thumbnailsContainer = document.getElementById('pv-thumbnails');
         thumbnailsContainer.innerHTML = '';
 
-        // If product only has 1 image, duplicate it a few times for the UI demo effect
-        let displayImages = [...product.images];
-        if (displayImages.length === 1) {
-            displayImages = [displayImages[0], displayImages[0], displayImages[0], displayImages[0]];
-        }
+        let displayImages = Array.isArray(product.images) && product.images.length > 0 ? [...product.images] : ['assets/logo.png'];
 
         const mainImage = document.getElementById('pv-main-image');
         mainImage.src = displayImages[0];
