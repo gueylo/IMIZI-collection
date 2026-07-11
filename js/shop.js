@@ -71,11 +71,44 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentSel = keepSelected ||
             (document.querySelector('input[name="subCat"]:checked')?.value) || 'All';
 
-        subCatList.innerHTML =
-            `<li><label><input type="radio" name="subCat" value="All" ${currentSel === 'All' ? 'checked' : ''}> All</label></li>` +
-            cats.map(c =>
+        const topCats = cats.slice(0, 3);
+        const moreCats = cats.slice(3);
+
+        let html = `<li><label><input type="radio" name="subCat" value="All" ${currentSel === 'All' ? 'checked' : ''}> All</label></li>` +
+            topCats.map(c =>
                 `<li><label><input type="radio" name="subCat" value="${c}" ${c === currentSel ? 'checked' : ''}> ${c}</label></li>`
             ).join('');
+
+        if (moreCats.length > 0) {
+            html += moreCats.map(c =>
+                `<li class="extra-sub-cat" style="display:none;"><label><input type="radio" name="subCat" value="${c}" ${c === currentSel ? 'checked' : ''}> ${c}</label></li>`
+            ).join('');
+            html += `<li style="width: 100%; margin-top: 2px;"><button id="show-more-sub-cats" style="background:transparent;border:none;color:var(--primary);font-size:12px;font-weight:600;cursor:pointer;padding:0;">+ Show More (${moreCats.length})</button></li>`;
+        }
+
+        subCatList.innerHTML = html;
+
+        if (moreCats.length > 0) {
+            const btn = document.getElementById('show-more-sub-cats');
+            const extras = subCatList.querySelectorAll('.extra-sub-cat');
+            
+            if (moreCats.includes(currentSel)) {
+                extras.forEach(el => el.style.display = '');
+                btn.textContent = '- Show Less';
+            }
+
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const isHidden = extras[0].style.display === 'none';
+                if (isHidden) {
+                    extras.forEach(el => el.style.display = '');
+                    btn.textContent = '- Show Less';
+                } else {
+                    extras.forEach(el => el.style.display = 'none');
+                    btn.textContent = `+ Show More (${moreCats.length})`;
+                }
+            });
+        }
 
         subCatRadios().forEach(r => r.addEventListener('change', renderShop));
     }
