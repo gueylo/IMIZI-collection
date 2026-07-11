@@ -156,11 +156,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // ── Interaction Logic for Utilities & Actions ──
 
-        // Zoom Button
-        document.getElementById('pv-zoom-btn')?.addEventListener('click', () => {
-            if (mainImage.src) window.open(mainImage.src, '_blank');
-        });
-
         // Utilities
         document.getElementById('pv-chat-btn')?.addEventListener('click', () => {
             alert('Opening live chat with IDDY COLLECTION support...');
