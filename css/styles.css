@@ -991,6 +991,10 @@ nav a.active::after {
 
 .hero-text {
     flex: 1;
+    min-height: 220px; /* Prevents height jumping when descriptions change */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .hero-visual {
