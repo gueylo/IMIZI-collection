@@ -104,10 +104,11 @@ document.addEventListener('DOMContentLoaded', function () {
             products = products.filter(function(p){ return p.mainCategory === filterCat; });
         }
         if (searchText) {
-            var q = searchText.toLowerCase();
+            var normQ = searchText.toLowerCase().replace(/[\s\W_]+/g, '');
             products = products.filter(function(p){
-                return p.name.toLowerCase().indexOf(q) !== -1 ||
-                       (p.subCategory||'').toLowerCase().indexOf(q) !== -1;
+                var normName = p.name.toLowerCase().replace(/[\s\W_]+/g, '');
+                var normCat = (p.subCategory||'').toLowerCase().replace(/[\s\W_]+/g, '');
+                return normName.indexOf(normQ) !== -1 || normCat.indexOf(normQ) !== -1;
             });
         }
 

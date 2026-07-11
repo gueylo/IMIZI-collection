@@ -107,6 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const selGender = document.querySelector('input[name="gender"]:checked')?.value  || 'All';
             const selSub    = document.querySelector('input[name="subCat"]:checked')?.value  || 'All';
             const query     = (searchInput?.value || '').toLowerCase().trim();
+            const normQuery = query.replace(/[\s\W_]+/g, '');
             const sortMode  = sortSelect?.value || 'newest';
 
             // Update title
@@ -153,10 +154,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 const matchSub    = selSub    === 'All' || p.subCategory  === selSub;
-                const matchSearch = !query ||
-                    (p.name || '').toLowerCase().includes(query) ||
-                    (p.description || '').toLowerCase().includes(query) ||
-                    (p.subCategory || '').toLowerCase().includes(query);
+                let matchSearch = !normQuery;
+                if (!matchSearch) {
+                    const normName = (p.name || '').toLowerCase().replace(/[\s\W_]+/g, '');
+                    const normDesc = (p.description || '').toLowerCase().replace(/[\s\W_]+/g, '');
+                    const normCat  = (p.subCategory || '').toLowerCase().replace(/[\s\W_]+/g, '');
+                    matchSearch = normName.includes(normQuery) || normDesc.includes(normQuery) || normCat.includes(normQuery);
+                }
                 return matchMain && matchGender && matchSub && matchSearch;
             });
 
