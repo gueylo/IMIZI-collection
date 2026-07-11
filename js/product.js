@@ -33,17 +33,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         const shortDesc = document.getElementById('pv-short-desc');
         if (shortDesc) shortDesc.textContent = product.description;
 
-        document.getElementById('pv-price').textContent = `${product.price.toLocaleString()} RWF`;
+        const price = product.price || 0;
+        document.getElementById('pv-price').textContent = `${price.toLocaleString()} RWF`;
         
         // Mock Old Price (just for UI styling as requested)
-        document.getElementById('pv-old-price').textContent = `${(product.price * 2).toLocaleString()} RWF`;
+        document.getElementById('pv-old-price').textContent = `${(price * 2).toLocaleString()} RWF`;
 
         // Render Thumbnails
         const thumbnailsContainer = document.getElementById('pv-thumbnails');
         thumbnailsContainer.innerHTML = '';
         
         // If product only has 1 image, duplicate it a few times for the UI demo effect
-        let displayImages = [...product.images];
+        let displayImages = Array.isArray(product.images) && product.images.length > 0 ? [...product.images] : ['assets/logo.png'];
         if (displayImages.length === 1) {
             displayImages = [displayImages[0], displayImages[0], displayImages[0], displayImages[0]];
         }
@@ -85,10 +86,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Render Sizes
         const sizesContainer = document.getElementById('pv-sizes');
         sizesContainer.innerHTML = '';
-        let selectedSize = product.sizes && product.sizes.length > 0 ? product.sizes[0] : null;
+        const prodSizes = Array.isArray(product.sizes) ? product.sizes : [];
+        let selectedSize = prodSizes.length > 0 ? prodSizes[0] : null;
 
-        if (product.sizes) {
-            product.sizes.forEach((size, idx) => {
+        if (prodSizes.length > 0) {
+            prodSizes.forEach((size, idx) => {
                 const btn = document.createElement('button');
                 btn.className = `pv-size-btn ${idx === 0 ? 'active' : ''}`;
                 btn.textContent = size;
