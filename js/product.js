@@ -116,14 +116,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // Actions
-        document.getElementById('pv-buy-btn').onclick = () => {
+        document.getElementById('pv-buy-btn').onclick = async () => {
             const qty = qtyInput ? parseInt(qtyInput.value) || 1 : 1;
-            addToCart(product, qty, selectedSize);
+            await addToCart(product.id, qty, selectedSize);
             window.location.href = 'index.html'; // Or redirect to checkout later
         };
-        document.getElementById('pv-cart-btn').onclick = () => {
+        document.getElementById('pv-cart-btn').onclick = async () => {
             const qty = qtyInput ? parseInt(qtyInput.value) || 1 : 1;
-            addToCart(product, qty, selectedSize);
+            await addToCart(product.id, qty, selectedSize);
             // The cart sidebar should automatically update because of store.js observers if implemented
             const cartToggle = document.getElementById('cart-toggle');
             if (cartToggle) cartToggle.click();
