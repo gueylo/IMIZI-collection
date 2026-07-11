@@ -1405,6 +1405,9 @@ nav a.active::after {
     .pre-footer-text {
         font-size: 24px;
     }
+    .pre-footer-banner {
+        height: 200px;
+    }
     .flash-nav-btn {
         display: none !important; /* Hide arrows on mobile because users swipe */
     }
