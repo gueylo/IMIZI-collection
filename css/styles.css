@@ -641,23 +641,22 @@ nav a:hover::after { width: 100%; }
 
 /* Sections */
 .section {
-    padding: 80px 5%;
+    padding: 40px 5%;
 }
 
 .section-title {
-    font-size: 40px;
-    margin-bottom: 50px;
+    font-size: 32px;
+    margin-bottom: 25px;
     text-align: center;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .section {
-        padding: 40px 5%; /* Significantly reduced vertical padding on mobile */
+        padding: 25px 5%; /* Ultra tight on mobile */
     }
     .section-title {
-        margin-bottom: 30px;
-        font-size: 32px;
+        margin-bottom: 15px;
+        font-size: 26px;
     }
     html, body { font-size: 14px; }
     header {
@@ -960,7 +959,7 @@ nav a.active::after {
 /* Hero Banner */
 .hero-banner {
     position: relative;
-    padding: 100px 5% 40px;
+    padding: 60px 5% 20px;
     background: var(--bg-surface);
     display: flex;
     flex-direction: column;
@@ -990,8 +989,9 @@ nav a.active::after {
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    gap: 20px;
     max-width: 1400px;
-    gap: 40px;
+    margin: 0 auto;
     position: relative;
     z-index: 3;
 }
