@@ -309,6 +309,7 @@ nav a:hover::after { width: 100%; }
 
 .product-img-wrapper {
     aspect-ratio: 1 / 1;
+    width: 100%;
     overflow: hidden;
     position: relative;
     background: transparent;
