@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     categoryLines.forEach(cat => {
         const grid = document.getElementById(`line-${cat.toLowerCase()}-grid`);
         if (grid) {
-            const catProducts = allProducts.filter(p => p.category === cat).slice(0, 8);
+            const catProducts = allProducts.filter(p => p.mainCategory === cat).slice(0, 8);
             if (catProducts.length > 0) {
                 grid.innerHTML = catProducts.map(p => createNewStockCardHTML(p)).join('') + `
                     <div class="product-card fade-in-up" style="display:flex; align-items:center; justify-content:center; cursor:pointer; background: transparent; border: 1px dashed var(--border); box-shadow: none;" onclick="window.location.href='shop.html?category=${cat}'">
