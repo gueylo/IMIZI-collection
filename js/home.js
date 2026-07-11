@@ -109,31 +109,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // ── Todays For You! Grid ────────────────────────────────
-    const todaysGrid = document.getElementById('todays-grid');
-    if (todaysGrid) {
-        // Take a random selection or next batch for "Todays picks"
-        const todaysProducts = allProducts.slice(0, 10);
-        todaysGrid.innerHTML = todaysProducts.map(p => window.createProductCardHTML ? window.createProductCardHTML(p) : '').join('');
-        
-        // Ensure createProductCardHTML is loaded from app.js
-        if (!window.createProductCardHTML) {
-            console.error("createProductCardHTML is not globally available. Make sure app.js is loaded and exposes it.");
+    // ── Category Lines ────────────────────────────────────
+    const categoryLines = ['Men', 'Women', 'Shoes', 'Accessories'];
+    categoryLines.forEach(cat => {
+        const grid = document.getElementById(`line-${cat.toLowerCase()}-grid`);
+        if (grid) {
+            const catProducts = allProducts.filter(p => p.category === cat).slice(0, 8);
+            if (catProducts.length > 0) {
+                grid.innerHTML = catProducts.map(p => createNewStockCardHTML(p)).join('') + `
+                    <div class="product-card fade-in-up" style="display:flex; align-items:center; justify-content:center; cursor:pointer; background: transparent; border: 1px dashed var(--border); box-shadow: none;" onclick="window.location.href='shop.html?category=${cat}'">
+                        <div style="text-align:center; color:var(--text-muted); font-size:16px; font-weight:bold; padding: 20px;">
+                            See All ${cat}<br><br><i class="fa-solid fa-arrow-right" style="font-size: 24px;"></i>
+                        </div>
+                    </div>
+                `;
+            } else {
+                grid.innerHTML = `<div style="padding: 20px; color: var(--text-muted); font-style: italic;">More ${cat} coming soon...</div>`;
+            }
         }
-
-        // Pill logic
-        const pills = document.querySelectorAll('.todays-picks-section .pill');
-        pills.forEach(pill => {
-            pill.addEventListener('click', () => {
-                pills.forEach(p => p.classList.remove('active'));
-                pill.classList.add('active');
-                
-                // Shuffle array to simulate different picks
-                const shuffled = [...allProducts].sort(() => 0.5 - Math.random()).slice(0, 10);
-                todaysGrid.innerHTML = shuffled.map(p => window.createProductCardHTML ? window.createProductCardHTML(p) : '').join('');
-            });
-        });
-    }
+    });
 
     // ── Curated Collections ────────────────────────────────
     const collectionGrid = document.getElementById('collection-grid');
