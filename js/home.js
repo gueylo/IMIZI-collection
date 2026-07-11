@@ -10,8 +10,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // ── Hero Banner Slider ──────────────────────────────────
     let featuredProducts = allProducts.filter(p => p.featured);
-    if (featuredProducts.length < 3) featuredProducts = [...featuredProducts, ...allProducts.slice(0, 3 - featuredProducts.length)];
-    
+    if (featuredProducts.length === 0 && allProducts.length > 0) {
+        featuredProducts = [allProducts[0]]; // Failsafe so the banner doesn't crash if 0 are featured
+    }
     const heroTitle = document.getElementById('hero-title');
     const heroDesc = document.getElementById('hero-desc');
     const heroImg = document.getElementById('hero-promo-img');
