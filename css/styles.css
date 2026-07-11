@@ -308,11 +308,12 @@ nav a:hover::after { width: 100%; }
 }
 
 .product-img-wrapper {
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1 / 1;
     height: auto;
     overflow: hidden;
     position: relative;
     background: #ffffff;
+    padding: 15px; /* Added padding to give the product breathing room */
 }
 
 .product-img {
@@ -1397,6 +1398,9 @@ nav a.active::after {
     }
     .pre-footer-text {
         font-size: 24px;
+    }
+    .flash-nav-btn {
+        display: none !important; /* Hide arrows on mobile because users swipe */
     }
 }
 
