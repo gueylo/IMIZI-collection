@@ -312,13 +312,14 @@ nav a:hover::after { width: 100%; }
     height: auto;
     overflow: hidden;
     position: relative;
-    background: var(--bg);
+    background: #ffffff;
 }
 
 .product-img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    mix-blend-mode: multiply;
     transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
     transform-origin: center;
 }
@@ -991,17 +992,6 @@ nav a.active::after {
 
 .hero-text {
     flex: 1;
-    min-height: 220px; /* Prevents height jumping when descriptions change */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-}
-
-@media (max-width: 768px) {
-    .hero-text {
-        align-items: center; /* Center the button on mobile */
-    }
 }
 
 .hero-visual {
@@ -1440,12 +1430,11 @@ nav a.active::after {
 .pv-thumb {
     width: 80px;
     height: 100px;
-    object-fit: contain; /* changed from cover to prevent cutoff */
+    object-fit: cover;
     border: 2px solid transparent;
     cursor: pointer;
-    background: #ffffff; /* changed to white for blend mode */
+    background: var(--bg-surface);
     transition: var(--transition-snappy);
-    mix-blend-mode: multiply; /* removes white background */
 }
 .pv-thumb:hover, .pv-thumb.active {
     border-color: var(--primary);
@@ -1454,7 +1443,7 @@ nav a.active::after {
 .pv-main-image-container {
     flex: 1;
     position: relative;
-    background: #ffffff; /* changed to white to blend with product background */
+    background: #ffffff;
     border: 1px solid var(--border);
     display: flex;
     align-items: center;
@@ -1465,9 +1454,9 @@ nav a.active::after {
 .pv-main-image-container img {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* changed from cover to prevent cutoff */
+    object-fit: contain;
+    mix-blend-mode: multiply;
     transition: transform 0.3s ease;
-    mix-blend-mode: multiply; /* removes white background */
 }
 
 .zoom-btn {
